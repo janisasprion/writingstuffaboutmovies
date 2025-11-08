@@ -1,0 +1,12 @@
+json
+[
+  {
+    "id": "1",
+    "title": "Beispielreview 1",
+    "date": "2025-11-08",
+    "language": "Deutsch",
+    "teaser": "Eine kurze Zusammenfassung des Films.",
+    "content": "Hier steht der ganze Text deiner Review.",
+    "image": "https://via.placeholder.com/300x400?text=Film+1"
+  }
+]

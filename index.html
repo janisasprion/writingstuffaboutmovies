@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writing Stuff About Movies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+  <div id="root"></div>
+
+  <script type="text/babel">
+
+const { useState, useEffect, useMemo } = React;
+
+function App() {
+  const initialReviews = Array.from({ length: 12 }).map((_, i) => ({
+    id: String(i + 1),
+    title: `Beispielreview ${i + 1}: Film ${i + 1}`,
+    date: `202${Math.floor(i / 4)}-0${(i % 9) + 1}-0${(i % 27) + 1}`,
+    language: i % 2 === 0 ? 'Deutsch' : 'Englisch',
+    teaser: `Eine interessante Auseinandersetzung mit Film ${i + 1}, voller Beobachtungen und filmischer Details.`,
+    content: `Dies ist der volle Text zu Film ${i + 1}.
+\nEin Werk, das sich mit Themen wie Identität, Erinnerung und Wahrnehmung auseinandersetzt.
+\nDie Kameraarbeit ist dabei besonders bemerkenswert.`,
+    image: `https://via.placeholder.com/300x400?text=Film+${i + 1}`,
+  }));
+
+  const [reviews] = useState(initialReviews);
+  const [query, setQuery] = useState('');
+  const [route, setRoute] = useState(() => parseHashRoute());
+  const [page, setPage] = useState(1);
+  const reviewsPerPage = 6;
+
+  useEffect(() => {
+    const onHash = () => setRoute(parseHashRoute());
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    let list = reviews.filter(r => !q || r.title.toLowerCase().includes(q) || r.teaser.toLowerCase().includes(q) || r.content.toLowerCase().includes(q));
+    return list.sort((a, b) => a.date < b.date ? 1 : -1);
+  }, [reviews, query]);
+
+  const totalPages = Math.ceil(filtered.length / reviewsPerPage);
+  const paginated = filtered.slice((page - 1) * reviewsPerPage, page * reviewsPerPage);
+
+  function openReview(id) { window.location.hash = `#/review/${id}`; }
+  function goHome() { window.location.hash = '#/'; }
+
+  const Footer = () => (
+    <footer className="mt-16 pt-6 border-t border-gray-300 text-center text-gray-600 text-sm space-y-2">
+      <p>Finde mich auch auf:</p>
+      <div className="flex justify-center gap-6 text-blue-600">
+        <a href="https://www.instagram.com/writing_stuff_about_movies/" target="_blank" rel="noopener noreferrer" className="hover:underline">Instagram</a>
+        <a href="https://letterboxd.com/DocOc/" target="_blank" rel="noopener noreferrer" className="hover:underline">Letterboxd</a>
+        <a href="https://www.kino-zeit.de/personen/janis-asprion" target="_blank" rel="noopener noreferrer" className="hover:underline">Kino-Zeit</a>
+        <a href="https://www.uncut.at/community/user.php?user_id=10924" target="_blank" rel="noopener noreferrer" className="hover:underline">Uncut</a>
+      </div>
+    </footer>
+  );
+
+  if (route.type === 'review') {
+    const r = reviews.find(x => x.id === route.id);
+    if (!r) return (<div className="p-6"><button onClick={goHome}>← Zu allen Texten</button><p>Review nicht gefunden</p></div>);
+
+    return (
+      <div className="min-h-screen p-6 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-3xl mx-auto">
+          <button onClick={goHome} className="px-4 py-2 border border-black bg-white text-black rounded-lg mb-6">← Zu allen Texten</button>
+          {r.image && <img src={r.image} className="w-full rounded-xl mb-6" />}
+          <h1 style={{ fontFamily: 'Oswald, sans-serif' }} className="text-5xl mb-4 text-center tracking-tight leading-tight">{r.title}</h1>
+          <div className="flex justify-center gap-4 text-sm text-gray-500 mb-4">
+            <time dateTime={r.date}>{formatDateNumeric(r.date)}</time>
+            <span className="ml-4">Textsprache: {r.language}</span>
+          </div>
+          <hr className="border-gray-300 mb-6" />
+          {r.content.split('\n\n').map((p, i) => <p key={i} className="text-lg text-gray-700 mb-4">{p}</p>)}
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen p-6 bg-gradient-to-b from-white to-gray-100">
+      <div className="max-w-3xl mx-auto text-center">
+        <h1 style={{ fontFamily: 'Oswald, sans-serif', textTransform: 'uppercase' }} className="text-7xl font-semibold mb-6 text-center tracking-tight leading-tight">WRITING STUFF ABOUT MOVIES</h1>
+        <hr className="border-black border-2 rounded-full w-1/3 mx-auto mb-6" />
+        <input
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="Suche Titel, Stichworte oder Text..."
+          className="px-8 py-5 border border-gray-400 rounded-lg shadow-md mb-10 w-3/4 max-w-lg mx-auto block text-lg"
+        />
+        <div className="flex flex-col divide-y divide-gray-200">
+          {paginated.map(r => (
+            <article key={r.id} className="py-8 flex gap-6 cursor-pointer" onClick={() => openReview(r.id)}>
+              {r.image ? <img src={r.image} className="w-36 h-52 object-cover rounded-lg" /> : <div className="w-36 h-52 bg-gray-100 flex items-center justify-center">No image</div>}
+              <div className="flex-1 text-left">
+                <h2 style={{ fontFamily: 'Oswald, sans-serif' }} className="text-2xl mb-2 font-medium">{r.title}</h2>
+                <div className="flex gap-4 text-sm text-gray-500 mb-2">
+                  <time dateTime={r.date}>{formatDateNumeric(r.date)}</time>
+                  <span>Textsprache: {r.language}</span>
+                </div>
+                <p className="text-gray-600 text-lg leading-snug">{r.teaser}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className="mt-8 flex justify-center gap-4">
+          <button onClick={() => setPage(p => Math.max(1, p - 1))} className="px-4 py-2 border border-black bg-white rounded-lg" disabled={page===1}>← Zurück</button>
+          <span className="text-gray-700 text-sm mt-2">Seite {page} von {totalPages}</span>
+          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} className="px-4 py-2 border border-black bg-white rounded-lg" disabled={page===totalPages}>Weiter →</button>
+        </div>
+        <Footer />
+      </div>
+    </div>
+  );
+}
+
+function parseHashRoute() {
+  const h = window.location.hash || '#/';
+  const reviewMatch = h.match(/^#\/review\/(.+)$/);
+  if (reviewMatch) return { type: 'review', id: reviewMatch[1] };
+  return { type: 'home' };
+}
+
+function formatDateNumeric(d) {
+  try {
+    const dt = new Date(d);
+    const month = String(dt.getMonth()+1).padStart(2,'0');
+    const day = String(dt.getDate()).padStart(2,'0');
+    return `${day}.${month}.${dt.getFullYear()}`;
+  } catch(e) { return d; }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+  </script>
+</body>
+</html>
