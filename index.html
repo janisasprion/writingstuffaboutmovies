@@ -37,6 +37,9 @@
       object-fit: cover;
       margin: 0 auto;
     }
+    .pre-wrap {
+      white-space: pre-wrap; /* Zeilenumbrüche aus JSON werden beibehalten */
+    }
   </style>
 </head>
 <body class="bg-gray-100">
@@ -85,7 +88,7 @@ function App() {
         <a href="https://www.instagram.com/writing_stuff_about_movies/" target="_blank" rel="noopener noreferrer" className="hover:underline">Instagram</a>
         <a href="https://letterboxd.com/DocOc/" target="_blank" rel="noopener noreferrer" className="hover:underline">Letterboxd</a>
         <a href="https://www.kino-zeit.de/personen/janis-asprion" target="_blank" rel="noopener noreferrer" className="hover:underline">Kino-Zeit</a>
-        <a href="https://www.uncut.at/community/user.php?user_id=10924" target="_blank" rel="noopener noreferrer" className="hover:underline">Ununcut</a>
+        <a href="https://www.uncut.at/community/user.php?user_id=10924" target="_blank" rel="noopener noreferrer" className="hover:underline">Uncut</a>
       </div>
     </footer>
   );
@@ -107,7 +110,7 @@ function App() {
             <span className="ml-4">Textsprache: {r.language}</span>
           </div>
           <hr className="border-gray-300 mb-6" />
-          {r.content.split('\n\n').map((p, i) => <p key={i} className="text-lg text-gray-700 mb-4">{p}</p>)}
+          {r.content.split('\n\n').map((p, i) => <p key={i} className="text-lg text-gray-700 mb-4 pre-wrap">{p}</p>)} {/* pre-wrap hinzugefügt */}
         </div>
         <Footer />
       </div>
@@ -116,7 +119,7 @@ function App() {
 
   return (
     <div className="min-h-screen p-6 bg-gradient-to-b from-white to-gray-100">
-      <div className="max-w-5xl mx-auto px-60"> {/* Zeilen 111-112: Abstand links und rechts vergrößert */}
+      <div className="max-w-5xl mx-auto px-12"> {/* Abstand vergrößert für Übersichtsseite */}
         <h1 style={{ fontFamily: 'Oswald, sans-serif', textTransform: 'uppercase' }} className="text-7xl font-semibold mb-6 tracking-tight leading-tight text-center">WRITING STUFF ABOUT MOVIES</h1>
         <hr className="border-black border-2 rounded-full w-1/3 mx-auto mb-6" />
         <input
@@ -125,7 +128,7 @@ function App() {
           placeholder="Suche Titel, Stichworte oder Text..."
           className="px-8 py-5 border border-gray-400 rounded-lg shadow-md mb-10 w-3/4 max-w-lg mx-auto block text-lg"
         />
-        <div className="flex flex-col divide-y divide-gray-200 px-60"> {/* Zeilen 121-122: Abstand links und rechts vergrößert */}
+        <div className="flex flex-col divide-y divide-gray-200 px-12"> {/* Abstand links/rechts vergrößert */}
           {paginated.map(r => (
             <article key={r.id} className="py-8 flex flex-row items-center gap-6 cursor-pointer" onClick={() => openReview(r.id)}>
               {r.image ? (
@@ -134,12 +137,12 @@ function App() {
                 <div className="w-2/5 h-24 bg-gray-100 flex items-center justify-center rounded-lg">No image</div>
               )}
               <div className="flex flex-col justify-center flex-1 ml-4 text-left">
-                <h2 style={{ fontFamily: 'Oswald, sans-serif' }} className="text-2xl font-medium mb-2">{r.title}</h2>
+                <h2 style={{ fontFamily: 'Oswald, sans-serif' }} className="text-2xl font-medium mb-2 pre-wrap">{r.title}</h2> {/* pre-wrap hinzugefügt */}
                 <div className="flex gap-4 text-sm text-gray-500 mb-2">
                   <time dateTime={r.date}>{formatDateNumeric(r.date)}</time>
                   <span>Textsprache: {r.language}</span>
                 </div>
-                <p className="text-gray-600 text-lg leading-snug">{r.teaser}</p>
+                <p className="text-gray-600 text-lg leading-snug pre-wrap">{r.teaser}</p> {/* pre-wrap hinzugefügt */}
               </div>
             </article>
           ))}
@@ -176,5 +179,3 @@ ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
 </html>
-
-
