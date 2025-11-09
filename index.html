@@ -23,7 +23,6 @@ function App() {
     title: `Beispielreview ${i + 1}: Film ${i + 1}`,
     date: `202${Math.floor(i / 4)}-0${(i % 9) + 1}-0${(i % 27) + 1}`,
     language: i % 2 === 0 ? 'Deutsch' : 'Englisch',
-    teaser: `Eine interessante Auseinandersetzung mit Film ${i + 1}, voller Beobachtungen und filmischer Details.`,
     content: `Dies ist der volle Text zu Film ${i + 1}.
 \nEin Werk, das sich mit Themen wie Identität, Erinnerung und Wahrnehmung auseinandersetzt.
 \nDie Kameraarbeit ist dabei besonders bemerkenswert.`,
@@ -145,4 +144,5 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
   </script>
 </body>
+
 </html>
