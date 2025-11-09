@@ -101,8 +101,8 @@ function App() {
               <div className="flex-1 text-left">
                 <h2 style={{ fontFamily: 'Oswald, sans-serif' }} className="text-2xl mb-2 font-medium">{r.title}</h2>
                 <div className="flex gap-4 text-sm text-gray-500 mb-2">
-                  <time dateTime={r.date}>{formatDateNumeric(r.date)}</time>
-                  <span>Textsprache: {r.language}</span>
+                  <time dateTime={r.date}>{formatDateNumeric(r.date)}  </time>
+                  <span>{r.language}</span>
                 </div>
                 <p className="text-gray-600 text-lg leading-snug">{r.teaser}</p>
               </div>
@@ -141,3 +141,4 @@ ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
 </html>
+
