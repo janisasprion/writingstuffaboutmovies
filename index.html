@@ -15,7 +15,6 @@
       width: 100%;
       padding-top: 56.25%; /* 16:9 ratio */
       overflow: hidden;
-      border-radius: 0.75rem;
     }
     .aspect-16-9 img {
       position: absolute;
@@ -35,7 +34,6 @@
       width: 75%;
       aspect-ratio: 16 / 9;
       object-fit: cover;
-      border-radius: 0.75rem;
       margin: 0 auto;
     }
   </style>
@@ -134,8 +132,8 @@ function App() {
               ) : (
                 <div className="w-2/5 h-24 bg-gray-100 flex items-center justify-center rounded-lg">No image</div>
               )}
-              <div className="flex-1 text-left">
-                <h2 style={{ fontFamily: 'Oswald, sans-serif' }} className="text-2xl mb-2 font-medium">{r.title}</h2>
+              <div className="flex-1 flex flex-col justify-center text-left">
+                <h2 style={{ fontFamily: 'Oswald, sans-serif' }} className="text-2xl font-medium mb-2">{r.title}</h2>
                 <div className="flex gap-4 text-sm text-gray-500 mb-2">
                   <time dateTime={r.date}>{formatDateNumeric(r.date)}</time>
                   <span>Textsprache: {r.language}</span>
@@ -177,3 +175,4 @@ ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
 </html>
+
