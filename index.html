@@ -87,7 +87,7 @@ function App() {
         <div className="max-w-3xl mx-auto">
           <button onClick={goHome} className="px-4 py-2 border border-black bg-white text-black rounded-lg mb-6">← Zu allen Texten</button>
           {r.image && (
-            <div className="aspect-16-9 mb-6">
+            <div className="aspect-16-9 mb-6 transform scale-75 mx-auto">
               <img src={r.image} alt={r.title} />
             </div>
           )}
@@ -119,11 +119,11 @@ function App() {
           {paginated.map(r => (
             <article key={r.id} className="py-8 flex gap-6 cursor-pointer items-center" onClick={() => openReview(r.id)}>
               {r.image ? (
-                <div className="w-40 flex-shrink-0 aspect-16-9">
+                <div className="w-2/5 flex-shrink-0 aspect-16-9 transform scale-75">
                   <img src={r.image} alt={r.title} />
                 </div>
               ) : (
-                <div className="w-40 h-24 bg-gray-100 flex items-center justify-center rounded-lg">No image</div>
+                <div className="w-2/5 h-24 bg-gray-100 flex items-center justify-center rounded-lg">No image</div>
               )}
               <div className="flex-1 text-left">
                 <h2 style={{ fontFamily: 'Oswald, sans-serif' }} className="text-2xl mb-2 font-medium">{r.title}</h2>
