@@ -25,6 +25,19 @@
       height: 100%;
       object-fit: cover;
     }
+    .home-image {
+      width: 40%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: 0.75rem;
+    }
+    .detail-image {
+      width: 75%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: 0.75rem;
+      margin: 0 auto;
+    }
   </style>
 </head>
 <body class="bg-gray-100">
@@ -87,9 +100,7 @@ function App() {
         <div className="max-w-3xl mx-auto">
           <button onClick={goHome} className="px-4 py-2 border border-black bg-white text-black rounded-lg mb-6">← Zu allen Texten</button>
           {r.image && (
-            <div className="aspect-16-9 mb-6" style={{ maxWidth: '75%', margin: '0 auto' }}>
-              <img src={r.image} alt={r.title} />
-            </div>
+            <img src={r.image} alt={r.title} className="detail-image mb-6" />
           )}
           <h1 style={{ fontFamily: 'Oswald, sans-serif' }} className="text-5xl mb-4 text-center tracking-tight leading-tight">{r.title}</h1>
           <div className="flex justify-center gap-4 text-sm text-gray-500 mb-4">
@@ -119,9 +130,7 @@ function App() {
           {paginated.map(r => (
             <article key={r.id} className="py-8 flex gap-6 cursor-pointer items-center" onClick={() => openReview(r.id)}>
               {r.image ? (
-                <div className="w-2/5 flex-shrink-0 aspect-16-9" style={{ maxWidth: '40%' }}>
-                  <img src={r.image} alt={r.title} />
-                </div>
+                <img src={r.image} alt={r.title} className="home-image" />
               ) : (
                 <div className="w-2/5 h-24 bg-gray-100 flex items-center justify-center rounded-lg">No image</div>
               )}
