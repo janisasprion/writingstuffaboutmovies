@@ -18,22 +18,18 @@
 const { useState, useEffect, useMemo } = React;
 
 function App() {
-  const initialReviews = Array.from({ length: 12 }).map((_, i) => ({
-    id: String(i + 1),
-    title: `Beispielreview ${i + 1}: Film ${i + 1}`,
-    date: `202${Math.floor(i / 4)}-0${(i % 9) + 1}-0${(i % 27) + 1}`,
-    language: i % 2 === 0 ? 'Deutsch' : 'Englisch',
-    content: `Dies ist der volle Text zu Film ${i + 1}.
-\nEin Werk, das sich mit Themen wie Identität, Erinnerung und Wahrnehmung auseinandersetzt.
-\nDie Kameraarbeit ist dabei besonders bemerkenswert.`,
-    image: `https://via.placeholder.com/300x400?text=Film+${i + 1}`,
-  }));
-
-  const [reviews] = useState(initialReviews);
+  const [reviews, setReviews] = useState([]);
   const [query, setQuery] = useState('');
   const [route, setRoute] = useState(() => parseHashRoute());
   const [page, setPage] = useState(1);
   const reviewsPerPage = 6;
+
+  useEffect(() => {
+    fetch('reviews.json')
+      .then(res => res.json())
+      .then(data => setReviews(data))
+      .catch(err => console.error('Fehler beim Laden von reviews.json:', err));
+  }, []);
 
   useEffect(() => {
     const onHash = () => setRoute(parseHashRoute());
@@ -144,5 +140,4 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
   </script>
 </body>
-
 </html>
